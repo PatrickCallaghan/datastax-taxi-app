@@ -8,17 +8,15 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.LocalDate;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
-import com.datastax.driver.core.policies.DCAwareRoundRobinPolicy;
-import com.datastax.driver.core.policies.TokenAwarePolicy;
 import com.datastax.taxi.model.Vehicle;
 import com.github.davidmoten.geo.GeoHash;
 import com.github.davidmoten.geo.LatLong;
@@ -37,6 +35,7 @@ public class VehicleDao {
 	
 	private static final String QUERY_BY_VEHICLE = "select * from " + vehicleTable + " where vehicle = ? and day = ?";
 	
+	private static DateTime date = DateTime.now();
 	private PreparedStatement insertVehicle;
 	private PreparedStatement insertCurrentLocation;
 	private PreparedStatement queryVehicle;
@@ -46,7 +45,6 @@ public class VehicleDao {
 	public VehicleDao(String[] contactPoints) {
 
 		Cluster cluster = Cluster.builder()
-				.withLoadBalancingPolicy(new TokenAwarePolicy(new DCAwareRoundRobinPolicy()))
 				.addContactPoints(contactPoints).build();
 		
 		this.session = cluster.connect();
@@ -62,20 +60,18 @@ public class VehicleDao {
 		
 		Set<Entry<String, LatLong>> entrySet = newLocations.entrySet();
 		
-		Date date = new Date();
+		date = date.plusSeconds(10);
 		
 		for (Entry<String, LatLong> entry : entrySet ){
 			
 			String tile1 = GeoHash.encodeHash(entry.getValue(), 4);
 			String tile2 = GeoHash.encodeHash(entry.getValue(), 7);
-			
-			
-			
-			wrapper.addStatement(insertVehicle.bind(entry.getKey(), dateFormatter.format(date), date, 
+								
+			wrapper.addStatement(insertVehicle.bind(entry.getKey(), dateFormatter.format(date.toDate()), date.toDate(), 
 					entry.getValue().getLat()+","+entry.getValue().getLon(), tile2));
 			
 			wrapper.addStatement(insertCurrentLocation.bind(entry.getKey(), tile1, tile2, 
-					entry.getValue().getLat()+","+entry.getValue().getLon(), new Date()));
+					entry.getValue().getLat()+","+entry.getValue().getLon(), date.toDate()));
 		}
 		wrapper.executeAsync(this.session);		
 	}

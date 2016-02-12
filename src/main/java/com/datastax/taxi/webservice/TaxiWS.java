@@ -27,7 +27,6 @@ public class TaxiWS {
 	//Service Layer.
 	private TaxiService service = new TaxiService();
 	
-
 	@GET
 	@Path("/getmovements/{vehicle}/{date}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -56,7 +55,5 @@ public class TaxiWS {
 		List<Vehicle> result = service.searchVehiclesByLonLatAndDistance(distance, new LatLong(lat,lon));
 		
 		return Response.status(201).entity(result).build();
-	}
-
-	
+	}	
 }

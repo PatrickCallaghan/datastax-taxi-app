@@ -13,7 +13,7 @@ import com.github.davidmoten.geo.LatLong;
 public class Main {
 	private static Logger logger = LoggerFactory.getLogger(Main.class);
 	private static int TOTAL_VEHICLES = 10000;
-	private static int BATCH = 1000;
+	private static int BATCH = 10000;
 	private static Map<String, LatLong> vehicleLocations = new HashMap<String, LatLong>();
 
 	private VehicleDao dao;
@@ -32,7 +32,7 @@ public class Main {
 		while (true) {
 			logger.info("Updating Locations");
 			updateLocations();
-			sleep(1);
+			sleep(5);
 		}
 	}
 

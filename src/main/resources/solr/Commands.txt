@@ -1,4 +1,6 @@
 dsetool create_core datastax_taxi_app.current_location reindex=true coreOptions=src/main/resources/solr/rt.yaml schema=src/main/resources/solr/geo.xml solrconfig=src/main/resources/solr/solrconfig.xml 
+dsetool create_core datastax_taxi_app.vehicle reindex=true coreOptions=src/main/resources/solr/rt.yaml schema=src/main/resources/solr/geo_vehicle.xml solrconfig=src/main/resources/solr/solrconfig.xml 
+
 
 //Connect to the Solr web app.
 http://localhost:8983/solr/

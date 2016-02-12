@@ -22,3 +22,5 @@ create table if not exists vehicle(
 
 truncate current_location;
 truncate vehicle;
+
+

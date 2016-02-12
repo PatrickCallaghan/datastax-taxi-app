@@ -16,14 +16,13 @@
 	<fieldType name="tdouble" class="solr.TrieDoubleField" precisionStep="8" omitNorms="true" positionIncrementGap="0"/>
 		
    </types>
- 
-  <fields>
+   <fields>
  	<field name="vehicle"  type="text" indexed="true"  stored="true"/>
-    <field name="tile1"  type="text" indexed="true"  stored="true"/>
-    <field name="tile2"  type="text" indexed="true"  stored="true"/>
-    <field name="lat_long" type="location" indexed="true"  stored="true"  multiValued="false" />
+	<field name="date"  type="date" indexed="true"  stored="true"/>
+ 	<field name="day"  type="text" indexed="true"  stored="true"/>
+ 	<field name="lat_long" type="location" indexed="true"  stored="true"  multiValued="false" />
     <dynamicField name="*_coordinate"  type="tdouble" indexed="true"  stored="false"/>
   </fields>
   <defaultSearchField>vehicle</defaultSearchField>
-  <uniqueKey>vehicle</uniqueKey>  
+  <uniqueKey>(vehicle, day, date)</uniqueKey>  
 </schema>

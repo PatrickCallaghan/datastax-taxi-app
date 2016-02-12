@@ -26,6 +26,12 @@ If you want to also query on where vehicles where at a certain time.
 
 	dsetool create_core datastax_taxi_app.vehicle reindex=true coreOptions=src/main/resources/solr/rt.yaml schema=src/main/resources/solr/geo_vehicle.xml solrconfig=src/main/resources/solr/solrconfig.xml	
 	
+NOTE : 
+
+It may be necessary to run the following in cqlsh as on some versions of DSE, the date column was not correctly set up as an index 
+
+	CREATE CUSTOM INDEX datastax_taxi_app_vehicle_date_index ON datastax_taxi_app.vehicle (date) USING 'com.datastax.bdp.search.solr.Cql3SolrSecondaryIndex';
+	
 To continuously update the locations of the vehicles run 
 	
 	mvn clean compile exec:java -Dexec.mainClass="com.datastax.taxi.Main" -DcontactPoints=localhost

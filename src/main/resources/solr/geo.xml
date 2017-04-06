@@ -1,5 +1,6 @@
 <schema name="current_location" version="1.1">
   <types>
+  	<fieldType class="org.apache.solr.schema.StrField" name="StrField"/>
   	<fieldType name="string" class="solr.TextField">
 		<analyzer>
 			<filter class="solr.ClassicFilterFactory"/>
@@ -11,14 +12,13 @@
 	    		<tokenizer class="solr.StandardTokenizerFactory"/>																					
 	  		</analyzer>
 		</fieldType>
-	<fieldType name="date" class="solr.TrieDateField" precisionStep="0" positionIncrementGap="0"/>
 	<fieldType name="location"  class="solr.LatLonType" subFieldSuffix="_coordinate"/>
 	<fieldType name="tdouble" class="solr.TrieDoubleField" precisionStep="8" omitNorms="true" positionIncrementGap="0"/>
 		
    </types>
  
   <fields>
- 	<field name="vehicle"  type="text" indexed="true"  stored="true"/>
+ 	<field indexed="true" multiValued="false" name="vehicle" stored="true" type="StrField"/>
     <field name="tile1"  type="text" indexed="true"  stored="true"/>
     <field name="tile2"  type="text" indexed="true"  stored="true"/>
     <field name="lat_long" type="location" indexed="true"  stored="true"  multiValued="false" />

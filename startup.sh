@@ -1,15 +1,24 @@
+echo 'Installing Maven'
+if [ -f /etc/redhat-release ]; then
+  yum install maven
+fi
+
+if [ -f /etc/lsb-release ]; then
+  apt-get install maven
+fi
+
 echo 'Building schema'
 mvn clean compile exec:java -Dexec.mainClass="com.datastax.demo.SchemaSetup" -DcontactPoints=localhost
 
 echo 'Creating core'
-dsetool create_core datastax_taxi_app.current_location reindex=true coreOptions=src/main/resources/solr/rt.yaml schema=src/main/resources/solr/geo.xml solrconfig=src/main/resources/solr/solrconfig.xml
+dsetool create_core datastax_taxi_app.current_location reindex=true schema=src/main/resources/solr/geo.xml solrconfig=src/main/resources/solr/solrconfig.xml
 
 echo 'Starting load data -> loader.log'
-nohup mvn exec:java -Dexec.mainClass="com.datastax.taxi.Main" -DcontactPoints=localhost > loader.log &
+nohup mvn exec:java -Dexec.mainClass="com.datastax.taxi.Main" -DcontactPoints=node0 > loader.log &
 
-echo 'Starting web server -> jetty.log'
-nohup mvn jetty:run > jetty.log & 
+echo 'Starting web server on port 8081 -> jetty.log'
+nohup mvn jetty:run -DcontactPoints=node0 -Djetty.port=8081 > jetty.log & 
 
-sleep 5
+sleep 2
 
-open http://localhost:8080/datastax-taxi-app/rest/getmovements/2/20170406
+echo 'Finished setting up'

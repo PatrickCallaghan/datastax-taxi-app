@@ -1,10 +1,10 @@
 echo 'Installing Maven'
 if [ -f /etc/redhat-release ]; then
-  yum install maven
+  yum install maven -y
 fi
 
 if [ -f /etc/lsb-release ]; then
-  apt-get install maven
+  apt-get install maven -y
 fi
 
 echo 'Building schema'

@@ -8,7 +8,7 @@ if [ -f /etc/lsb-release ]; then
 fi
 
 echo 'Building schema'
-mvn clean compile exec:java -Dexec.mainClass="com.datastax.demo.SchemaSetup" -DcontactPoints=localhost
+mvn clean compile exec:java -Dexec.mainClass="com.datastax.demo.SchemaSetup" -DcontactPoints=node0
 
 echo 'Creating core'
 dsetool create_core datastax_taxi_app.current_location reindex=true schema=src/main/resources/solr/geo.xml solrconfig=src/main/resources/solr/solrconfig.xml

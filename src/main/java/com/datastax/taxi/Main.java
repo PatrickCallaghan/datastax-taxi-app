@@ -3,6 +3,7 @@ package com.datastax.taxi;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,6 +18,7 @@ public class Main {
 	private static Map<String, LatLong> vehicleLocations = new HashMap<String, LatLong>();
 
 	private VehicleDao dao;
+	private static DateTime date = DateTime.now();
 
 	public Main() {
 
@@ -30,9 +32,12 @@ public class Main {
 		createStartLocations();
 		
 		while (true) {
+			date = date.plusSeconds(10);
+			
+			logger.info(date.toString());			
 			logger.info("Updating Locations");
 			updateLocations();
-			sleep(5);
+			sleep(1);
 		}
 	}
 
@@ -49,7 +54,7 @@ public class Main {
 			newLocations.put(random, update);
 		}
 
-		dao.insertVehicleLocation(newLocations);
+		dao.insertVehicleLocation(newLocations, date);
 	}
 
 	private LatLong update(LatLong latLong) {

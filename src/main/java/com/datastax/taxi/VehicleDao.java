@@ -35,7 +35,7 @@ public class VehicleDao {
 	
 	private static final String QUERY_BY_VEHICLE = "select * from " + vehicleTable + " where vehicle = ? and day = ?";
 	
-	private static DateTime date = DateTime.now();
+	
 	private PreparedStatement insertVehicle;
 	private PreparedStatement insertCurrentLocation;
 	private PreparedStatement queryVehicle;
@@ -55,13 +55,11 @@ public class VehicleDao {
 		this.queryVehicle = session.prepare(QUERY_BY_VEHICLE);
 	}
 	
-	public void insertVehicleLocation(Map<String, LatLong> newLocations){
+	public void insertVehicleLocation(Map<String, LatLong> newLocations, DateTime date){
 		AsyncWriterWrapper wrapper = new AsyncWriterWrapper();
 		
 		Set<Entry<String, LatLong>> entrySet = newLocations.entrySet();
-		
-		date = date.plusSeconds(10);
-		
+				
 		for (Entry<String, LatLong> entry : entrySet ){
 			
 			String tile1 = GeoHash.encodeHash(entry.getValue(), 4);

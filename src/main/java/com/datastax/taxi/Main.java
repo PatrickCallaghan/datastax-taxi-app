@@ -18,7 +18,7 @@ public class Main {
 	private static Map<String, LatLong> vehicleLocations = new HashMap<String, LatLong>();
 
 	private VehicleDao dao;
-	private static DateTime date = DateTime.now();
+	private static DateTime date = DateTime.now().minusDays(1);
 
 	public Main() {
 
